@@ -295,8 +295,16 @@ section{ padding:64px 0; }
 }
 .cta-band h2{ color:var(--cream-0); }
 .cta-band p{ color:var(--cream-100); }
-.cta-band .btn-accent{ background:var(--gold); color:var(--ink-900); }
-.cta-band .btn-accent:hover{ filter:brightness(.93); }
+/* The muted brand gold reads flat against this clay/maroon band — same
+   warm family, too little contrast. A brighter, more saturated gold here
+   (band-local, doesn't touch the gold used elsewhere) keeps the button
+   from disappearing into the background. */
+.cta-band .btn-accent{
+  background:linear-gradient(180deg, #F2C066 0%, #E2A233 100%);
+  color:var(--ink-900);
+  box-shadow:0 8px 20px -8px rgba(20,14,8,.55), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.cta-band .btn-accent:hover{ filter:brightness(1.06); transform:translateY(-1px); }
 
 /* ===== Form ===== */
 .form-grid{ display:grid; gap:16px; }
