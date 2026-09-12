@@ -64,24 +64,34 @@ section{ padding:64px 0; }
 .btn-ghost-inverse{ background:transparent; border-color:rgba(251,248,242,.4); color:var(--text-on-inverse); }
 .btn-ghost-inverse:hover{ border-color:var(--cream-0); }
 
-/* ===== Yoga-mat CTA boxes (brand signature) ===== */
+/* ===== Yoga-mat CTA boxes (brand signature) =====
+   Built outer-in so it never depends on where in the page it's placed:
+   .mat-box ITSELF is the rolled-out mat (coloured, ridged texture); its
+   ::before is the cream note-card face, inset so the mat visibly shows
+   all the way round; the real text sits on top of the face. Nothing here
+   relies on negative z-index, so it can't get silently painted over by
+   an ancestor section's own background. */
 .mat-box{
   position:relative;
-  background:var(--surface-card);
-  border-radius:var(--radius-mat);
-  padding:32px;
-  border:1px solid var(--border-default);
-  box-shadow:0 18px 40px -24px rgba(35,31,25,.25);
+  background-color:var(--clay-500);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(35,31,25,.14) 0px, rgba(35,31,25,.14) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, rgba(255,255,255,.28) 0%, transparent 22%);
+  border-radius:calc(var(--radius-mat) + 10px);
+  padding:34px 30px;
+  box-shadow:0 18px 40px -22px rgba(35,31,25,.4);
 }
 .mat-box::before{
   content:"";
-  position:absolute; inset:10px;
-  border:1.5px dashed var(--sand-300);
-  border-radius:calc(var(--radius-mat) - 8px);
-  pointer-events:none;
+  position:absolute;
+  inset:14px 10px 22px 10px;
+  background:var(--surface-card);
+  border:1px solid var(--border-default);
+  border-radius:var(--radius-mat);
+  box-shadow:0 10px 20px -14px rgba(35,31,25,.3);
 }
-.mat-box-accent{ background:var(--forest-700); color:var(--text-on-inverse); }
-.mat-box-accent::before{ border-color:rgba(251,248,242,.25); }
+.mat-box > *{ position:relative; }
+.mat-box-accent::before{ background:var(--forest-700); border-color:rgba(251,248,242,.18); }
 .mat-box-accent p, .mat-box-accent h3{ color:var(--text-on-inverse); }
 
 /* mat-edge: the same rolled-mat dashed inset, layered onto any card that carries a CTA
@@ -315,8 +325,23 @@ input:focus, select:focus, textarea:focus{ outline:2px solid var(--forest-500); 
 /* ===== Reveal-on-scroll ===== */
 .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
 .reveal.in{ opacity:1; transform:none; }
+
+/* Headlines: slide in left-to-right */
+.reveal-left{ opacity:0; transform:translateX(-56px); transition:opacity .7s ease, transform .7s ease; }
+.reveal-left.in{ opacity:1; transform:none; }
+
+/* Images: fade + zoom-settle, contained by .frame/.page-hero overflow:hidden */
+.reveal-img{ opacity:0; transform:scale(1.14); transition:opacity .9s ease, transform .9s ease; }
+.reveal-img.in{ opacity:1; transform:scale(1); }
+
+/* Stagger siblings inside grids so groups don't move in lockstep */
+.grid > *:nth-child(2){ transition-delay:.12s; }
+.grid > *:nth-child(3){ transition-delay:.24s; }
+.grid > *:nth-child(4){ transition-delay:.36s; }
+
 @media (prefers-reduced-motion: reduce){
-  .reveal{ opacity:1; transform:none; transition:none; }
+  .reveal, .reveal-left, .reveal-img{ opacity:1; transform:none; transition:none; }
+  .grid > *{ transition-delay:0s !important; }
   html{ scroll-behavior:auto; }
 }
 

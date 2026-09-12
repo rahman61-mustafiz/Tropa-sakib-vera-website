@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Reveal-on-scroll, with a safety net so content is never left invisible
   // (JS timing edge cases, crawlers, screenshot/preview tools that don't scroll).
-  var reveals = document.querySelectorAll('.reveal');
+  var reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-img');
   if ('IntersectionObserver' in window && reveals.length) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Force-reveal anything still hidden shortly after load, so a missed
   // trigger never permanently hides real content.
   window.setTimeout(function () {
-    document.querySelectorAll('.reveal:not(.in)').forEach(function (el) {
+    document.querySelectorAll('.reveal:not(.in), .reveal-left:not(.in), .reveal-img:not(.in)').forEach(function (el) {
       el.classList.add('in');
     });
   }, 1200);
