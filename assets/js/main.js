@@ -69,6 +69,22 @@ document.addEventListener('DOMContentLoaded', function () {
       var hero = heroVideo.closest('.hero');
       if (hero) hero.classList.add('video-failed');
     });
+
+    // Some mobile browsers (slow connection, data-saver mode) silently block
+    // autoplay and show their own play control instead. Try again as soon as
+    // there's enough data, and on the first tap anywhere, so a stuck video
+    // never needs a precise tap on a tiny native play button to recover.
+    var tryPlay = function () {
+      if (heroVideo.paused) {
+        var p = heroVideo.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+    };
+    heroVideo.addEventListener('canplay', tryPlay);
+    heroVideo.addEventListener('loadeddata', tryPlay);
+    ['touchstart', 'click'].forEach(function (evt) {
+      document.addEventListener(evt, tryPlay, { once: true, passive: true });
+    });
   }
 
   // Contact form: mailto-based submit with a friendly success state
